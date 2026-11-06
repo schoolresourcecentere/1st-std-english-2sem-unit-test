@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1200, initial-scale=1.0">
+<title>Grade 1 English — Question Paper Generator</title>
+<style>
+:root{--ink:#17324d;--blue:#245b8f;--soft:#eaf2fb;--pink:#d81b75;--green:#16845b;--border:#58739a}
+*{box-sizing:border-box}
+body{margin:0;background:#eef3f8;color:#1f2937;font-family:Arial,"Helvetica Neue",sans-serif}
+.container{max-width:1200px;margin:18px auto;padding:16px}
+h1{margin:0;color:var(--blue);font-size:28px;text-align:center}
+.subtitle{text-align:center;margin:6px 0 18px;color:#52606d}
+.panel{background:#fff;border:1px solid #d5deea;border-radius:14px;padding:16px;margin:12px 0;box-shadow:0 5px 18px #0000000d}
+.panel h2{margin:0 0 12px;color:var(--blue);font-size:18px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.field label{display:block;font-weight:700;font-size:13px;margin-bottom:5px}
+.field input,.field select{width:100%;padding:10px;border:1px solid #b8c6d8;border-radius:9px;font:inherit;background:#fff}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+button{border:0;border-radius:9px;padding:10px 14px;font:inherit;font-weight:700;cursor:pointer}
+.btn-primary{background:var(--blue);color:white}.btn-green{background:var(--green);color:white}.btn-pink{background:var(--pink);color:white}.btn-gray{background:#e5eaf0;color:#233142}
+.marks{display:flex;gap:8px;flex-wrap:wrap}.pill{border:1px solid #aab9ca;padding:8px 12px;border-radius:999px;cursor:pointer;background:#fff}.pill.selected{background:var(--soft);border-color:var(--blue);font-weight:700}
+.hint{font-size:13px;color:#667085;margin-top:8px}
+.paper{background:white;max-width:794px;min-height:1123px;margin:18px auto;padding:24mm 16mm 18mm;border:2px solid #6576a7;border-radius:10px;position:relative}
+.school-name{text-align:center;font-size:23px;font-weight:800;color:#173b7a;margin-bottom:7px}.subject-line{text-align:center;font-weight:700;color:#5a1d67}.test-title{text-align:center;color:var(--pink);font-size:20px;font-weight:800;margin:12px 0}.sep{border:0;border-top:2px solid #8aa0bb;margin:10px 0}
+.meta-row{display:grid;grid-template-columns:1.4fr 1fr .8fr 1fr;gap:7px;font-size:13px}.meta-row>div{padding:7px;border:1px solid #ccd6e2;border-radius:5px}
+.section-title{background:#dbe8f7;border-left:5px solid var(--blue);padding:8px;margin:14px 0 8px;font-weight:800;color:#173b7a}
+.qlist{margin-top:5px}.qlist li{padding:6px 2px;line-height:1.55}.qmark{font-size:12px;color:#7b8794;font-weight:700}.marks-formula-box{margin-top:15px;padding:8px;border:1px dashed #78909c;text-align:center;font-weight:700}
+.answer-title{font-size:20px;color:var(--green);font-weight:800;text-align:center;margin:25px 0 10px}.alist li{margin:8px 0;line-height:1.5}.pdf-footer{text-align:center;border-top:1px solid #ddd;margin-top:20px;padding-top:8px;font-size:11px;color:#667085}.pdf-footer a{color:#245b8f}
+.no-print{}
+@media(max-width:800px){.grid{grid-template-columns:1fr 1fr}.meta-row{grid-template-columns:1fr 1fr}.paper{padding:12mm;min-height:auto}}
+@media(max-width:520px){.grid{grid-template-columns:1fr}.meta-row{grid-template-columns:1fr}.container{padding:8px}h1{font-size:22px}}
+@media print{
+ body{background:#fff}.no-print{display:none!important}.container{max-width:none;margin:0;padding:0}.paper{display:block!important;margin:0;width:210mm;min-height:297mm;border:0;border-radius:0;padding:15mm 13mm 15mm;box-shadow:none}.paper *{break-inside:auto}
+ #answerSection{break-before:page}.ui-footer{display:none}
+ @page{size:A4;margin:0}
+}
+
+@media print{
+  #answerKey{display:none !important}
+  body.print-with-answers #answerKey{display:block !important}
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Grade 1 English — Question Paper Generator</h1>
+  <div class="subtitle">Mridang — English — Part 2</div>
+
+  <div class="panel no-print">
+    <h2>1. School and Examination Details</h2>
+    <div class="grid">
+      <div class="field"><label>School Name</label><input id="schoolName" placeholder="e.g. Government Higher Primary School"></div>
+      <div class="field"><label>Subject</label><input id="subject" value="English — Mridang"></div>
+      <div class="field"><label>Class</label><input id="className" value="Grade 1"></div>
+      <div class="field"><label>Academic Year</label><input id="academicYear" value="2026-27"></div>
+      <div class="field"><label>Teacher Name</label><input id="teacherName" placeholder="Teacher Name"></div>
+      <div class="field"><label>Date</label><input id="examDate" type="date"></div>
+    </div>
+  </div>
+
+  <div class="panel no-print">
+    <h2>2. Lesson Selection</h2>
+    <div class="grid">
+      <div class="field"><label>Section</label><select id="sectionSelect"></select></div>
+      <div class="field"><label>Lesson</label><select id="chapterSelect"></select></div>
+      <div class="field"><label>Marks Pattern</label>
+        <div class="marks">
+          <label class="pill" data-val="15"><input type="radio" name="marks" value="15"> 15</label>
+          <label class="pill selected" data-val="20"><input type="radio" name="marks" value="20" checked> 20</label>
+          <label class="pill" data-val="25"><input type="radio" name="marks" value="25"> 25</label>
+          <label class="pill" data-val="30"><input type="radio" name="marks" value="30"> 30</label>
+        </div>
+      </div>
+    </div>
+    <div class="hint">📚 Choose All Sections → All Lessons for a mixed paper. Covers all 5 main lessons and their additional readings, songs and word activities.</div>
+  </div>
+
+  <div class="panel no-print">
+    <h2>3. Add Your Own Question</h2>
+    <div class="grid">
+      <div class="field" style="grid-column:span 2"><label>Question</label><input id="customQ" placeholder="Enter your own question here"></div>
+      <div class="field"><label>Marks</label>
+        <select id="customMark"><option value="1">1 mark</option><option value="2">2 marks</option><option value="4">4 marks</option></select>
+      </div>
+      <div class="field" style="grid-column:span 3"><label>Answer</label><input id="customA" placeholder="Enter the answer for the answer key"></div>
+    </div>
+    <div class="controls">
+      <button class="btn-green" id="addCustomBtn">➕ Add Question</button>
+    </div>
+    <div class="hint">Added questions remain in the pool for subsequent Generate/Shuffle actions until Reset.</div>
+  </div>
+
+  <div class="panel no-print">
+    <h2>4. Question Paper Controls</h2>
+    <div class="controls">
+      <button class="btn-primary" id="generateBtn">📝 Generate Question Paper</button>
+      <button class="btn-green" id="shuffleBtn">🔀 Random / Shuffle</button>
+      <button class="btn-pink" id="printBtn">🖨️ A4 Print / PDF</button>
+      <button class="btn-gray" id="resetBtn">↺ Reset</button>
+    </div>
+    <div class="hint">Click directly on the generated paper to edit questions, answers and details. The answer key is included in Print/PDF.</div>
+  </div>
+
+  <div id="printRow" class="controls no-print" style="display:none;justify-content:center;margin:10px 0">
+    <button class="btn-pink" onclick="window.print()">🖨️ Print / Save as PDF Now</button>
+  </div>
+
+  <div id="paper" class="paper" style="display:none"></div>
+
+  <div class="panel no-print" style="margin-top:18px">
+    <b>Grade 1:</b> 1st ENGLISH MRIDANG Part 2<br>
+    <span class="hint">Coverage: A Farm; Fun with Pictures; The Food We Eat; The Four Seasons; Anandi’s Rainbow. Includes Animals and Birds, A Visit to the Market, Pitter Patter, Rain, food riddles, colours and word practice from the supplied Mridang textbook.</span>
+  </div>
+</div>
+<script>
+
+const DATA = {
+  "Unit 2: Life Around Us": [
+    {
+      "no": 3,
+      "name": "A Farm",
+      "author": "Song",
+      "q1": [
+        {
+          "q": "Who has a farm in the song?",
+          "a": "Grandpa has a farm."
+        },
+        {
+          "q": "Name the large farm animal in the first verse.",
+          "a": "Cow."
+        },
+        {
+          "q": "What sound does the cow make?",
+          "a": "Moo-moo."
+        },
+        {
+          "q": "Name the bird in the second verse.",
+          "a": "Hen."
+        },
+        {
+          "q": "What sound does the hen make in the song?",
+          "a": "Cluck-cluck."
+        },
+        {
+          "q": "Complete: My dear ___ had a farm.",
+          "a": "Grandpa."
+        },
+        {
+          "q": "Is a cow an animal or a plant?",
+          "a": "An animal."
+        },
+        {
+          "q": "Name one animal from the farm colouring help box.",
+          "a": "Cat, cow, goat, pig, hen or cock is a suitable answer."
+        }
+      ],
+      "q2": [
+        {
+          "q": "Name two living things in the song.",
+          "a": "A cow and a hen."
+        },
+        {
+          "q": "Say the two animal sounds in the song.",
+          "a": "Moo-moo and cluck-cluck."
+        },
+        {
+          "q": "Name two farm animals from the colouring activity.",
+          "a": "Cow and goat. Other suitable animals from the activity are acceptable."
+        },
+        {
+          "q": "Complete two pairs: cow—___; hen—___.",
+          "a": "Cow—moo. Hen—cluck."
+        },
+        {
+          "q": "What sound can you use if you sing the song about a cat?",
+          "a": "Meow-meow. Similar home-language cat sounds are acceptable."
+        }
+      ],
+      "q4": [
+        {
+          "q": "Match four animals with their sounds: cow, hen, cat and dog.",
+          "a": "Cow—moo. Hen—cluck. Cat—meow. Dog—bark."
+        },
+        {
+          "q": "Write four animal names from the farm activity.",
+          "a": "Cow, goat, pig and cat. Other names from the activity are acceptable."
+        },
+        {
+          "q": "Complete four facts: Grandpa had a ___. The cow says ___. The hen says ___. A cat says ___.",
+          "a": "Farm. Moo. Cluck. Meow."
+        },
+        {
+          "q": "Say or write four short sentences about the song.",
+          "a": "Grandpa has a farm. A cow is on the farm. A hen is on the farm. We sing their sounds. Equivalent short answers are acceptable."
+        }
+      ]
+    },
+    {
+      "no": "Reading",
+      "name": "Animals and Birds",
+      "author": "Reading within A Farm",
+      "q1": [
+        {
+          "q": "Who tells us about the animals near his home?",
+          "a": "Jaggu."
+        },
+        {
+          "q": "Where does Jaggu live?",
+          "a": "Nagpur."
+        },
+        {
+          "q": "Which animal lives near the gate?",
+          "a": "A dog."
+        },
+        {
+          "q": "What does the cow eat?",
+          "a": "Grass."
+        },
+        {
+          "q": "Which animal chases the rat?",
+          "a": "A cat."
+        },
+        {
+          "q": "Which animals swing and jump in trees?",
+          "a": "Monkeys."
+        },
+        {
+          "q": "What colour is the crow in the reading?",
+          "a": "Black."
+        },
+        {
+          "q": "What colour is the parrot's beak?",
+          "a": "Red."
+        }
+      ],
+      "q2": [
+        {
+          "q": "Where do the cats jump?",
+          "a": "They jump up and down in the verandah."
+        },
+        {
+          "q": "Why should Jaggu walk carefully in the field?",
+          "a": "There are snakes in the field. He should keep away from them."
+        },
+        {
+          "q": "Name two birds from the reading.",
+          "a": "Crow and pigeon. Sparrow, parrot and peacock are also correct."
+        },
+        {
+          "q": "Give the colours of the pigeon and parrot in the reading.",
+          "a": "The pigeon is grey. The parrot is green."
+        },
+        {
+          "q": "Name two jungle animals in the speaking activity.",
+          "a": "Elephant and lion. Tiger is also correct."
+        }
+      ],
+      "q4": [
+        {
+          "q": "Match four birds with their descriptions: crow, pigeon, parrot and peacock.",
+          "a": "Crow—black. Pigeon—grey. Parrot—green with a red beak. Peacock—many colours."
+        },
+        {
+          "q": "Write four animal names from Jaggu's reading.",
+          "a": "Dog, cat, cow and monkey. Rat and snake are also correct."
+        },
+        {
+          "q": "Complete four facts: Jaggu lives in ___. The dog is near the ___. The cow eats ___. The cat chases a ___.",
+          "a": "Nagpur. Gate. Grass. Rat."
+        },
+        {
+          "q": "Say or write four short sentences about animals.",
+          "a": "A cow eats grass. A cat chases a rat. Monkeys jump in trees. A crow is black. Equivalent facts from the reading are acceptable."
+        }
+      ]
+    }
+  ],
+  "Unit 3: Food": [
+    {
+      "no": 1,
+      "name": "Fun with Pictures",
+      "author": "Picture reading and Fruits for All song",
+      "q1": [
+        {
+          "q": "Name a yellow fruit listed in the writing activity.",
+          "a": "Mango or banana."
+        },
+        {
+          "q": "Name the red fruit listed in the writing activity.",
+          "a": "Apple."
+        },
+        {
+          "q": "What colour is the carrot in the activity?",
+          "a": "Orange."
+        },
+        {
+          "q": "What colour is the brinjal in the activity?",
+          "a": "Purple."
+        },
+        {
+          "q": "How many yellow mangoes are in the song?",
+          "a": "Five."
+        },
+        {
+          "q": "Who rests under the tree in the song?",
+          "a": "A traveller."
+        },
+        {
+          "q": "Who nests on the tree?",
+          "a": "A bird."
+        },
+        {
+          "q": "Who runs up the tree?",
+          "a": "A squirrel."
+        }
+      ],
+      "q2": [
+        {
+          "q": "Name two fruits from the lesson.",
+          "a": "Mango and apple. Banana, guava and other pictured fruits are also acceptable."
+        },
+        {
+          "q": "Name two vegetables from the lesson.",
+          "a": "Carrot and potato. Brinjal and radish are also correct."
+        },
+        {
+          "q": "Who lives under the tree in the song?",
+          "a": "A rabbit lives under the tree."
+        },
+        {
+          "q": "What do we do before preparing fruit chaat?",
+          "a": "We wash the fruit well. The teacher cuts the fruit."
+        },
+        {
+          "q": "Why do we eat fruits and vegetables?",
+          "a": "They help us grow and stay healthy. Other simple, sensible responses are acceptable."
+        }
+      ],
+      "q4": [
+        {
+          "q": "Name four fruits from the lesson.",
+          "a": "Mango, banana, apple and guava. Other fruits shown in the lesson are acceptable."
+        },
+        {
+          "q": "Match four foods with their activity colours: mango, apple, carrot and brinjal.",
+          "a": "Mango—yellow. Apple—red. Carrot—orange. Brinjal—purple."
+        },
+        {
+          "q": "Name four who receive or share fruit in the song.",
+          "a": "The traveller, bird, squirrel and rabbit. The children sharing fruit are also part of the song."
+        },
+        {
+          "q": "Give four simple steps for the class fruit activity.",
+          "a": "Bring a fruit. Wash it well. Let the teacher cut it. Share the fruit chaat. Equivalent short answers are acceptable."
+        }
+      ]
+    },
+    {
+      "no": "Reading",
+      "name": "A Visit to the Market",
+      "author": "Reading within Fun with Pictures",
+      "q1": [
+        {
+          "q": "What is Mini's father?",
+          "a": "A farmer."
+        },
+        {
+          "q": "What does he grow on his farm?",
+          "a": "Vegetables."
+        },
+        {
+          "q": "Where does he sell his vegetables?",
+          "a": "In the market."
+        },
+        {
+          "q": "On which day does Mini go to the market with him?",
+          "a": "Saturday."
+        },
+        {
+          "q": "Who sometimes makes a string of jasmine flowers?",
+          "a": "Mini's mother."
+        },
+        {
+          "q": "Which large fruits are behind the apples?",
+          "a": "Pineapples."
+        },
+        {
+          "q": "What does Mini carry home?",
+          "a": "A small basket of flowers."
+        },
+        {
+          "q": "What does her father carry home?",
+          "a": "A bag of fruits."
+        }
+      ],
+      "q2": [
+        {
+          "q": "Name two things people buy in the market.",
+          "a": "Fruits and vegetables. Flowers and toys are also correct."
+        },
+        {
+          "q": "Name two flowers Mini's father points out.",
+          "a": "Roses and marigolds. Jasmine is also correct."
+        },
+        {
+          "q": "Where are the oranges kept in the story?",
+          "a": "They are on the right of the apples."
+        },
+        {
+          "q": "Where is the watermelon kept in the story?",
+          "a": "It is on the left of the apples."
+        },
+        {
+          "q": "Why does Mini go around the market with her father?",
+          "a": "She sees different things and learns their names. They also take flowers and fruit home."
+        }
+      ],
+      "q4": [
+        {
+          "q": "Name four fruits in the market conversation.",
+          "a": "Apples, pineapples, oranges and watermelon."
+        },
+        {
+          "q": "Complete four facts: Mini's father is a ___. He grows ___. Mini visits on ___. She carries a basket of ___.",
+          "a": "Farmer. Vegetables. Saturday. Flowers."
+        },
+        {
+          "q": "Say or write four short sentences about Mini's visit.",
+          "a": "Mini goes with her father. He sells vegetables. She sees flowers and fruit. They return home together."
+        },
+        {
+          "q": "Write four things you might buy at a market. Give model answers.",
+          "a": "Apples, carrots, flowers and potatoes. Other suitable market items are acceptable."
+        }
+      ]
+    },
+    {
+      "no": 2,
+      "name": "The Food We Eat",
+      "author": "Reading and food activities",
+      "q1": [
+        {
+          "q": "Name a food in the children's lunch boxes.",
+          "a": "Idli, paratha, chilla, fruits, roti with sabzi or poori with aloo sabzi is suitable."
+        },
+        {
+          "q": "Why has one child brought no lunch?",
+          "a": "The child's mother is sick."
+        },
+        {
+          "q": "What do friends offer the child?",
+          "a": "They offer paratha and chilla."
+        },
+        {
+          "q": "What does the child say after receiving food?",
+          "a": "Thank you."
+        },
+        {
+          "q": "Which animal gives milk in the reading?",
+          "a": "Cow."
+        },
+        {
+          "q": "Which insects give us honey?",
+          "a": "Bees."
+        },
+        {
+          "q": "Who works hard to grow our food?",
+          "a": "Farmers."
+        },
+        {
+          "q": "Should we waste food?",
+          "a": "No."
+        }
+      ],
+      "q2": [
+        {
+          "q": "Name two foods in the lunch scene.",
+          "a": "Idli and paratha. Other foods from the scene are acceptable."
+        },
+        {
+          "q": "What can we make from milk in the reading?",
+          "a": "Curds and butter."
+        },
+        {
+          "q": "How do the friends help the child without lunch?",
+          "a": "They offer to share their food. The child thanks them."
+        },
+        {
+          "q": "Which fruit has the same name as its colour in the riddle?",
+          "a": "Orange."
+        },
+        {
+          "q": "Which vegetable in the riddle can make your eyes water when cut?",
+          "a": "Onion."
+        }
+      ],
+      "q4": [
+        {
+          "q": "Answer four food riddles: a fruit named after its colour; hard brown outside and white inside; a vegetable that makes you cry when cut; fruit growing in a bunch.",
+          "a": "Orange. Coconut. Onion. Grapes."
+        },
+        {
+          "q": "Name four foods from the lunch boxes.",
+          "a": "Idli, chilla, paratha and fruits. Roti with sabzi, poori with aloo sabzi and Godok are also named."
+        },
+        {
+          "q": "Write four good food habits. Give model answers.",
+          "a": "Wash hands before eating. Eat different healthy foods. Do not waste food. Thank the people who prepare it. Other suitable habits are acceptable."
+        },
+        {
+          "q": "Complete four facts: Milk comes from ___. Honey comes from ___. We make butter from ___. We thank ___ for growing food.",
+          "a": "Cows. Bees. Milk. Farmers."
+        }
+      ]
+    }
+  ],
+  "Unit 4: Seasons": [
+    {
+      "no": 1,
+      "name": "The Four Seasons",
+      "author": "Song and seasonal readings",
+      "q1": [
+        {
+          "q": "Which season is hot in the song?",
+          "a": "Summer."
+        },
+        {
+          "q": "When do flowers bloom in the song?",
+          "a": "Spring."
+        },
+        {
+          "q": "Which season brings rain clouds?",
+          "a": "Monsoon."
+        },
+        {
+          "q": "Which season is cold?",
+          "a": "Winter."
+        },
+        {
+          "q": "Where do people want a dip in summer?",
+          "a": "In a pool."
+        },
+        {
+          "q": "Where do Brinda's grandparents live?",
+          "a": "Hyderabad."
+        },
+        {
+          "q": "What does Brinda wear in the summer reading?",
+          "a": "A cotton frock."
+        },
+        {
+          "q": "Where has Prithvi gone in winter?",
+          "a": "Shimla."
+        }
+      ],
+      "q2": [
+        {
+          "q": "What do people enjoy on sunny winter days?",
+          "a": "They enjoy the Sun's rays."
+        },
+        {
+          "q": "Name two things connected with monsoon in the activity.",
+          "a": "Umbrella and raindrops. Puddle, mud and clouds are also suitable."
+        },
+        {
+          "q": "Name two things connected with winter.",
+          "a": "Cold weather and a woollen cap are suitable answers."
+        },
+        {
+          "q": "What happens to flowers in spring?",
+          "a": "They bloom. The song says flowers bloom every day."
+        },
+        {
+          "q": "What can we wear in hot weather?",
+          "a": "Light cotton clothes are suitable. Brinda wears a cotton frock in the reading."
+        }
+      ],
+      "q4": [
+        {
+          "q": "Match four seasons with their clues: summer, spring, monsoon and winter.",
+          "a": "Summer—hot. Spring—flowers bloom. Monsoon—rain. Winter—cold."
+        },
+        {
+          "q": "Write four clothing names from the lesson.",
+          "a": "Shirt, cap, frock and pants. Other clothing names printed in the lesson are acceptable."
+        },
+        {
+          "q": "Complete four facts: Summer is ___. Winter is ___. Monsoon brings ___. Spring brings blooming ___.",
+          "a": "Hot. Cold. Rain. Flowers."
+        },
+        {
+          "q": "Give four safe habits for seasonal weather. Model answers are acceptable.",
+          "a": "Drink water in hot weather. Wear warm clothes when it is cold. Use an umbrella with adult guidance in rain. Stay away from flooded water. Other sensible answers are acceptable."
+        }
+      ]
+    },
+    {
+      "no": "Songs",
+      "name": "Pitter Patter and Rain",
+      "author": "Additional songs in The Four Seasons",
+      "q1": [
+        {
+          "q": "What sound does the speaker hear in Pitter Patter?",
+          "a": "Thunder."
+        },
+        {
+          "q": "What makes the pitter-patter sound?",
+          "a": "Raindrops."
+        },
+        {
+          "q": "Is the speaker wet in Pitter Patter?",
+          "a": "Yes."
+        },
+        {
+          "q": "What colour is the grass in Rain?",
+          "a": "Green."
+        },
+        {
+          "q": "Does rain fall on the trees in the song?",
+          "a": "Yes."
+        },
+        {
+          "q": "Does rain fall on the rooftops?",
+          "a": "Yes."
+        },
+        {
+          "q": "Who else does rain fall on in the last line?",
+          "a": "The speaker."
+        },
+        {
+          "q": "Name a word in the songs that begins with r.",
+          "a": "Rain or raindrops."
+        }
+      ],
+      "q2": [
+        {
+          "q": "Name two places where rain falls in the song.",
+          "a": "It falls on the grass and trees. Rooftops are also mentioned."
+        },
+        {
+          "q": "What does wet through suggest in Pitter Patter?",
+          "a": "The speaker is very wet from the rain."
+        },
+        {
+          "q": "What two rain-related sounds are named?",
+          "a": "Thunder and the pitter-patter of raindrops."
+        },
+        {
+          "q": "Which song mentions the green grass?",
+          "a": "Rain mentions it."
+        },
+        {
+          "q": "What should a child do during thunder and lightning?",
+          "a": "Go to a safe place indoors with an adult. Other suitable safety responses are acceptable."
+        }
+      ],
+      "q4": [
+        {
+          "q": "Name four things rain falls on in Rain.",
+          "a": "Green grass, trees, rooftops and the speaker."
+        },
+        {
+          "q": "Complete four phrases from the songs: I hear ___; pitter-patter ___; green ___; rain on the ___.",
+          "a": "Thunder. Raindrops. Grass. Trees or rooftops."
+        },
+        {
+          "q": "Write four words connected with rain.",
+          "a": "Rain, clouds, umbrella and puddle. Other suitable words are acceptable."
+        },
+        {
+          "q": "Say or write four short sentences about a rainy day. Give a model answer.",
+          "a": "I see clouds. I hear raindrops. I use an umbrella with an adult. I stay away from flooded places. Other suitable responses are acceptable."
+        }
+      ]
+    },
+    {
+      "no": 2,
+      "name": "Anandi's Rainbow",
+      "author": "Story",
+      "q1": [
+        {
+          "q": "Who dreams of rainbows?",
+          "a": "Anandi."
+        },
+        {
+          "q": "What is Anandi's cat called?",
+          "a": "Milli."
+        },
+        {
+          "q": "Where does Anandi see the rainbow?",
+          "a": "Across the sky outside her window."
+        },
+        {
+          "q": "Where does she run with Milli?",
+          "a": "To the garden."
+        },
+        {
+          "q": "What does Anandi like to do?",
+          "a": "Draw and paint."
+        },
+        {
+          "q": "What does she want to paint?",
+          "a": "The flowers in her garden."
+        },
+        {
+          "q": "Which colour does she leave for the Sun?",
+          "a": "Yellow."
+        },
+        {
+          "q": "What happens to the rainbow at the end?",
+          "a": "It disappears."
+        }
+      ],
+      "q2": [
+        {
+          "q": "What does Anandi see on waking?",
+          "a": "She sees a huge bright rainbow in a clear blue sky."
+        },
+        {
+          "q": "What is Anandi's idea for the garden?",
+          "a": "She wants to paint the flowers with rainbow colours."
+        },
+        {
+          "q": "Which colour does she use on the leaves?",
+          "a": "Green."
+        },
+        {
+          "q": "Why does she save the yellow colour?",
+          "a": "She wants the Sun to look bright and cheerful."
+        },
+        {
+          "q": "Name two colours she gives to flowers.",
+          "a": "Violet and blue. Indigo, orange and red are also correct."
+        }
+      ],
+      "q4": [
+        {
+          "q": "Tell the story in four short sentences.",
+          "a": "Anandi wakes and sees a rainbow. She runs to the garden with Milli. She gives rainbow colours to the flowers and leaves in the story. She saves yellow for the Sun, and the rainbow disappears."
+        },
+        {
+          "q": "Name four colours from the story.",
+          "a": "Violet, indigo, blue and green. Orange, red and yellow are also named."
+        },
+        {
+          "q": "Complete four facts: The girl is ___. Her cat is ___. The leaves are ___. The Sun is ___.",
+          "a": "Anandi. Milli. Green. Yellow."
+        },
+        {
+          "q": "Say or write four short sentences about yourself. Give a model answer.",
+          "a": "My name is Anu. I am six years old. My favourite colour is blue. I like drawing. Children should use their own details."
+        }
+      ]
+    }
+  ],
+  "Words and Simple Sentences": [
+    {
+      "no": "Practice",
+      "name": "Sounds, Colours and Everyday Words",
+      "author": "Textbook language activities",
+      "q1": [
+        {
+          "q": "What is the last letter in rat?",
+          "a": "T."
+        },
+        {
+          "q": "What is the last letter in jam?",
+          "a": "M."
+        },
+        {
+          "q": "What is the last letter in pen?",
+          "a": "N."
+        },
+        {
+          "q": "What is the last letter in cap?",
+          "a": "P."
+        },
+        {
+          "q": "What is the opposite of hot?",
+          "a": "Cold."
+        },
+        {
+          "q": "Which word is a colour: green or grass?",
+          "a": "Green."
+        },
+        {
+          "q": "Complete: This ___ my lunch. (is/are)",
+          "a": "Is."
+        },
+        {
+          "q": "Complete: These ___ oranges. (is/are)",
+          "a": "Are."
+        }
+      ],
+      "q2": [
+        {
+          "q": "Name two colours in the textbook.",
+          "a": "Green and yellow. Other printed colour names are acceptable."
+        },
+        {
+          "q": "Name two fruits and say their activity colours.",
+          "a": "A mango is yellow. An apple is red. Other correct textbook pairs are acceptable."
+        },
+        {
+          "q": "Write one sentence with cow.",
+          "a": "A cow eats grass. Other correct short sentences are acceptable."
+        },
+        {
+          "q": "Clap for the parts of farmer. How many parts are there in the activity?",
+          "a": "Two: far-mer."
+        },
+        {
+          "q": "Clap for the parts of mango. How many parts are there?",
+          "a": "Two: man-go."
+        }
+      ],
+      "q4": [
+        {
+          "q": "Give the last letters of four words: jam, pen, bell and cap.",
+          "a": "Jam—m. Pen—n. Bell—l. Cap—p."
+        },
+        {
+          "q": "Match four foods with their colours: banana, potato, carrot and radish.",
+          "a": "Banana—yellow. Potato—brown. Carrot—orange. Radish—white."
+        },
+        {
+          "q": "Complete four short sentences with is or are: This ___ a cow. These ___ oranges. This ___ my lunch. These ___ carrots.",
+          "a": "Is. Are. Is. Are."
+        },
+        {
+          "q": "Write four short sentences using cat, cow, mango and rain. Give model answers.",
+          "a": "The cat jumps. The cow eats. I like mango. I see rain. Other correct short sentences are acceptable."
+        }
+      ]
+    }
+  ]
+};
+const sectionSelect=document.getElementById("sectionSelect");
+const chapterSelect=document.getElementById("chapterSelect");
+let currentChapters=[], currentMarks=20, last={a:[],b:[],c:[]};
+
+function allChapters(){
+  return Object.entries(DATA).flatMap(([sec,arr])=>arr.map(x=>({...x,section:sec})));
+}
+function populateSections(){
+  sectionSelect.innerHTML='<option value="__ALL__">📚 All Sections</option>'+Object.keys(DATA).map(s=>`<option>${s}</option>`).join("");
+  populateChapters();
+}
+function populateChapters(){
+  const sec=sectionSelect.value;
+  const arr=sec==="__ALL__"?allChapters():DATA[sec].map(x=>({...x,section:sec}));
+  chapterSelect.innerHTML='<option value="__ALL__">📚 All Lessons</option>'+
+    arr.map((x,i)=>`<option value="${i}">${x.no}. ${x.name} — ${x.author}</option>`).join("");
+}
+function getChapters(){
+  const sec=sectionSelect.value, val=chapterSelect.value;
+  const arr=sec==="__ALL__"?allChapters():DATA[sec].map(x=>({...x,section:sec}));
+  return val==="__ALL__"?arr:[arr[+val]];
+}
+function pick(arr,n){
+  const a=[...arr]; for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}
+  return a.slice(0,Math.min(n,a.length));
+}
+function pool(chs,key){return chs.flatMap(c=>(c[key]||[]).map(q=>({...q,chapter:c.name,section:c.section})))}
+function marksChoice(){return +document.querySelector('input[name=marks]:checked').value}
+let customQuestions={1:[],2:[],4:[]};
+function addCustom(){
+  const q=document.getElementById("customQ").value.trim();
+  const a=document.getElementById("customA").value.trim();
+  const m=+document.getElementById("customMark").value;
+  if(!q){alert("Please enter a question.");return}
+  customQuestions[m].push({q,a:a||"The teacher may complete this answer.",chapter:"Custom Question"});
+  document.getElementById("customQ").value="";
+  document.getElementById("customA").value="";
+  alert("Custom question added.");
+}
+function generate(reselect=true){
+  const chs=getChapters(), marks=marksChoice(), comp={15:[5,3,1],20:[4,4,2],25:[5,4,3],30:[6,4,4]}[marks];
+  currentChapters=chs; currentMarks=marks;
+  if(reselect){
+    last={
+      a:pick(pool(chs,"q1").concat(customQuestions[1]),comp[0]),
+      b:pick(pool(chs,"q2").concat(customQuestions[2]),comp[1]),
+      c:pick(pool(chs,"q4").concat(customQuestions[4]),comp[2])
+    }
+  }
+  render(chs,marks,last);
+}
+function esc(v){return String(v).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function render(chs,marks,s){
+  const school=document.getElementById("schoolName").value||"________________________ School";
+  const subject=document.getElementById("subject").value||"English — Mridang";
+  const cls=document.getElementById("className").value||"Grade 1";
+  const year=document.getElementById("academicYear").value||"2026-27";
+  const teacher=document.getElementById("teacherName").value||"________________";
+  const date=document.getElementById("examDate").value||"________________";
+  const title=chs.length===1?`Lesson: ${chs[0].no}. ${chs[0].name}`:`All Lessons — Mixed Question Paper`;
+  const list=(a,m)=>a.map(x=>`<li contenteditable="true">${esc(x.q)} <span class="qmark">[${m} ${m===1?"mark":"marks"}]</span><small style="display:block;color:#8a94a6">(${esc(x.chapter)})</small></li>`).join("");
+  const answers=a=>a.map(x=>`<li contenteditable="true"><b>Q:</b> ${esc(x.q)}<br><b>A:</b> ${esc(x.a)}</li>`).join("");
+  const formula=marks===15?"5×1 + 3×2 + 1×4 = 15":marks===20?"4×1 + 4×2 + 2×4 = 20":marks===25?"5×1 + 4×2 + 3×4 = 25":"6×1 + 4×2 + 4×4 = 30";
+  document.getElementById("paper").innerHTML=`
+    <div class="school-name" contenteditable="true">${esc(school)}</div>
+    <div class="subject-line" contenteditable="true">${esc(subject)} — ${esc(cls)} | Academic Year: ${esc(year)}</div>
+    <div class="test-title" contenteditable="true">${title}</div>
+    <hr class="sep">
+    <div class="meta-row">
+      <div contenteditable="true"><b>Teacher Name:</b> ${esc(teacher)}</div>
+      <div contenteditable="true"><b>Date:</b> ${esc(date)}</div>
+      <div contenteditable="true"><b>Total Marks:</b> ${marks}</div>
+      <div contenteditable="true"><b>Time:</b> ______ hour(s)</div>
+    </div>
+    <hr class="sep">
+    <div class="section-title">Part A: Answer in a word or a short sentence. (1 mark each)</div>
+    <ol class="qlist">${list(s.a,1)}</ol>
+    <div class="section-title">Part B: Give two short answers, or answer as directed. (2 marks each)</div>
+    <ol class="qlist">${list(s.b,2)}</ol>
+    <div class="section-title">Part C: Write four short answers, complete the task, or answer as directed. (4 marks each)</div>
+    <ol class="qlist">${list(s.c,4)}</ol>
+    <div class="marks-formula-box" contenteditable="true">Marks Pattern: ${formula}</div>
+    <div style="text-align:center;font-weight:800;margin-top:20px">*** Best Wishes ***</div>
+    <div class="pdf-footer"><b>SCHOOL RESOURCE CENTER</b><br>Grade 1 English — Part 2 | Textbook-based Question Paper</div>
+    <div id="answerSection">
+      <div class="answer-title">Answer Key</div>
+      <div style="padding:10px;background:#edf8f2;border:1px solid #8bc7a8;border-radius:7px;font-size:12px">
+        These model answers are based on the textbook and its exercises. Teachers may read instructions aloud and accept suitable oral answers, single words or short phrases for Grade 1. Teachers may review them against the textbook before assessment. Personal-response answers are examples, not the only acceptable answers.
+      </div>
+      <div class="section-title">Part A</div><ol class="alist">${answers(s.a)}</ol>
+      <div class="section-title">Part B</div><ol class="alist">${answers(s.b)}</ol>
+      <div class="section-title">Part C</div><ol class="alist">${answers(s.c)}</ol>
+      <div class="pdf-footer"><b>SCHOOL RESOURCE CENTER</b><br>Grade 1 English — Part 2</div>
+    </div>`;
+  document.getElementById("paper").style.display="block";
+  document.getElementById("printRow").style.display="flex";
+}
+document.querySelectorAll('input[name=marks]').forEach(r=>r.addEventListener("change",e=>{
+  document.querySelectorAll(".pill").forEach(p=>p.classList.remove("selected"));
+  e.target.closest(".pill").classList.add("selected");
+}));
+sectionSelect.addEventListener("change",populateChapters);
+document.getElementById("addCustomBtn").onclick=addCustom;
+document.getElementById("generateBtn").onclick=()=>generate(true);
+document.getElementById("shuffleBtn").onclick=()=>generate(true);
+document.getElementById("printBtn").onclick=()=>{
+  if(document.getElementById("paper").style.display==="none") generate(true);
+  window.print();
+};
+document.getElementById("resetBtn").onclick=()=>{
+  document.getElementById("schoolName").value="";
+  document.getElementById("teacherName").value="";
+  document.getElementById("examDate").value="";
+  document.getElementById("academicYear").value="2026-27";
+  document.getElementById("className").value="Grade 1";
+  document.getElementById("subject").value="English — Mridang";
+  document.getElementById("customQ").value="";
+  document.getElementById("customA").value="";
+  document.getElementById("customMark").value="1";
+  last={a:[],b:[],c:[]};
+  sectionSelect.value="__ALL__"; populateChapters();
+  document.querySelector('input[name=marks][value="20"]').checked=true;
+  document.querySelectorAll(".pill").forEach(p=>p.classList.remove("selected"));
+  document.querySelector('.pill[data-val="20"]').classList.add("selected");
+  customQuestions={1:[],2:[],4:[]};
+  document.getElementById("paper").style.display="none"; document.getElementById("printRow").style.display="none"; document.body.classList.remove("print-with-answers");
+};
+populateSections();
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+@media print{
+  .no-print{
+    display:none !important;
+  }
+}
+</style>
+
+<div class="no-print" style="text-align:center;margin:15px 0;">
+  <a href="https://bilingualmediumschools.blogspot.com/2026/04/home-page.html"
+     target="_blank"
+     style="display:inline-block;
+            background:#1565c0;
+            color:#fff;
+            text-decoration:none;
+            padding:10px 18px;
+            border-radius:8px;
+            font-weight:bold;
+            font-size:16px;">
+<br> Created by: Manohar R, K.G.F.<br>
+    🌐 School Resource Centre – Click Here to Visit
+  </a>
+</div>
+</body>
+</html>
